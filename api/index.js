@@ -33,6 +33,9 @@ apiRouter.use(async (req, res, next) => {
 const plantsRouter = require("./plants");
 apiRouter.use("/plants", plantsRouter);
 
+const usersRouter = require("./users");
+apiRouter.use("/users", usersRouter);
+
 apiRouter.get("/", (req, res) => {
   res.send("Hello world");
 });

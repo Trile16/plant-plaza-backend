@@ -1,8 +1,7 @@
 const client = require("./index.js");
 const { createPlant, getPlants } = require("./plants.js");
 const { createUser, getUsers } = require("./users.js");
-const { createList, getLists } = require("./lists.js");
-const { addPlantToList, getListPlantById } = require("./list_plants.js");
+const { addPlantToUser, getUserPlantById } = require("./user_plants.js");
 
 const dropTables = async () => {
   try {
@@ -10,6 +9,7 @@ const dropTables = async () => {
 
     await client.query(`
             DROP TABLE IF EXISTS list_plants;
+            DROP TABLE IF EXISTS user_plants;
             DROP TABLE IF EXISTS lists;
             DROP TABLE IF EXISTS plants;
             DROP TABLE IF EXISTS users;
@@ -38,21 +38,16 @@ const createTables = async () => {
                 id SERIAL PRIMARY KEY,
                 "firstName" VARCHAR(225) NOT NULL,
                 "lastName" VARCHAR(225) NOT NULL,
-                email VARCHAR(225) UNIQUE NOT NULL,
+                username VARCHAR(225) UNIQUE NOT NULL,
                 password VARCHAR(255) NOT NULL,
                 "isAdmin" BOOLEAN DEFAULT false
             );
 
-            CREATE TABLE lists(
+            CREATE TABLE user_plants(
                 id SERIAL PRIMARY KEY,
-                "userId" INTEGER REFERENCES users(id)
-            );
-
-            CREATE TABLE list_plants(
-                id SERIAL PRIMARY KEY,
-                "listId" INTEGER REFERENCES lists(id),
+                "userId" INTEGER REFERENCES users(id),
                 "plantId" INTEGER REFERENCES plants(id),
-                UNIQUE ("listId", "plantId")
+                UNIQUE ("userId", "plantId")
             );
         `);
 
@@ -104,7 +99,7 @@ const createUsersData = async () => {
       {
         firstName: "Tri",
         lastName: "Le",
-        email: "trimail@trimail.com",
+        username: "trimail@trimail.com",
         password: "plantplaza",
         isAdmin: true,
       },
@@ -120,51 +115,30 @@ const createUsersData = async () => {
   }
 };
 
-const createListsData = async () => {
-  try {
-    console.log("Inserting lists data...");
-
-    const listsData = [
-      {
-        userId: 1,
-        test: 100,
-      },
-    ];
-
-    for (const list of listsData) {
-      await createList(list);
-    }
-
-    console.log("Finished lists data!");
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const createListPlantsData = async () => {
+const createUserPlantsData = async () => {
   try {
     console.log("Inserting list plants data...");
 
-    const listPlantsData = [
+    const userPlantsData = [
       {
-        listId: 1,
+        userId: 1,
         plantId: 1,
       },
       {
-        listId: 1,
+        userId: 1,
         plantId: 2,
       },
       {
-        listId: 1,
+        userId: 1,
         plantId: 3,
       },
     ];
 
-    for (const listPlant of listPlantsData) {
-      await addPlantToList(listPlant);
+    for (const userPlant of userPlantsData) {
+      await addPlantToUser(userPlant);
     }
 
-    console.log("Finished list plants data!");
+    console.log("Finished user plants data!");
   } catch (error) {
     console.error(error);
   }
@@ -178,8 +152,7 @@ const rebuildDB = async () => {
     await createTables();
     await createPlantsData();
     await createUsersData();
-    await createListsData();
-    await createListPlantsData();
+    await createUserPlantsData();
   } catch (error) {
     console.error(error);
   }
@@ -199,19 +172,13 @@ const testDB = async () => {
 
     console.log("Users: ", users);
 
-    console.log("Checking for lists...");
+    console.log("Checking for user plants...");
 
-    const lists = await getLists();
+    const userPlant1 = await getUserPlantById(1);
+    const userPlant2 = await getUserPlantById(2);
+    const userPlant3 = await getUserPlantById(3);
 
-    console.log("Lists: ", lists);
-
-    console.log("Checking for list_plants...");
-
-    const listPlant1 = await getListPlantById(1);
-    const listPlant2 = await getListPlantById(2);
-    const listPlant3 = await getListPlantById(3);
-
-    console.log("List_plants: ", [listPlant1, listPlant2, listPlant3]);
+    console.log("User plants: ", [userPlant1, userPlant2, userPlant3]);
   } catch (error) {
     console.error(error);
   }

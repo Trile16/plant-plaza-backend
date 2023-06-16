@@ -1,5 +1,6 @@
 const express = require("express");
 const plantsRouter = express.Router();
+const { requireUser } = require("./utils");
 const { getPlants, getPlantById } = require("../db/plants");
 
 plantsRouter.use("/", (req, res, next) => {
