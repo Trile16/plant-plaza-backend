@@ -55,14 +55,25 @@ usersRouter.post("/login", async (req, res, next) => {
   try {
     const { username, password } = req.body;
 
+    console.log(password);
+
     if (!username || !password) {
       next({
-        name: "MissingCredentialsError",
+        name: "Missing Credentials Error",
         message: "Please supply both an email and password",
       });
     }
 
     const user = await getUserByUsername(username);
+
+    if (!user) {
+      next({
+        name: "Incorrect Credentials Error",
+        message: "Username or password is incorrect",
+      });
+    }
+
+    console.log(user, "user");
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     console.log(passwordMatch);

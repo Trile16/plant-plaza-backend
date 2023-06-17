@@ -17,22 +17,43 @@ const addPlantToUser = async ({ userId, plantId }) => {
   }
 };
 
-const getUserPlantById = async (id) => {
+const removePlantFromUser = async (id) => {
   try {
     const {
-      rows: [user_plant],
+      rows: [plant],
     } = await client.query(
       `
-            SELECT * FROM user_plants
-            WHERE user_plants.id = $1;
-        `,
+      DELETE FROM user_plants
+      WHERE user_plants.id = $1
+      RETURNING *;
+    `,
       [id]
     );
 
-    return user_plant;
+    return plant;
   } catch (error) {
     console.error(error);
   }
 };
 
-module.exports = { addPlantToUser, getUserPlantById };
+const getUserPlantsByUserId = async (userId) => {
+  try {
+    const { rows: user_plants } = await client.query(
+      `
+            SELECT plants.* FROM plants
+            JOIN user_plants
+            ON plants.id = user_plants."plantId"
+            JOIN users
+            ON users.id = user_plants."userId"
+            WHERE users.id=$1;
+        `,
+      [userId]
+    );
+
+    return user_plants;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+module.exports = { addPlantToUser, removePlantFromUser, getUserPlantsByUserId };

@@ -47,6 +47,26 @@ const getUsers = async () => {
   }
 };
 
+const getUserById = async (id) => {
+  try {
+    const {
+      rows: [user],
+    } = await client.query(
+      `
+      SELECT * FROM users
+      WHERE id=$1;
+    `,
+      [id]
+    );
+
+    delete user.password;
+
+    return user;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const getUserByUsername = async (username) => {
   try {
     const {
@@ -65,4 +85,4 @@ const getUserByUsername = async (username) => {
   }
 };
 
-module.exports = { createUser, getUsers, getUserByUsername };
+module.exports = { createUser, getUsers, getUserById, getUserByUsername };

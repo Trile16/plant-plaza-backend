@@ -1,7 +1,7 @@
 const client = require("./index.js");
 const { createPlant, getPlants } = require("./plants.js");
 const { createUser, getUsers } = require("./users.js");
-const { addPlantToUser, getUserPlantById } = require("./user_plants.js");
+const { addPlantToUser, getUserPlantsByUserId } = require("./user_plants.js");
 
 const dropTables = async () => {
   try {
@@ -30,7 +30,6 @@ const createTables = async () => {
                 id SERIAL PRIMARY KEY,
                 name VARCHAR(225) UNIQUE NOT NULL,
                 description VARCHAR(225) NOT NULL,
-                price INTEGER NOT NULL,
                 category VARCHAR(225) NOT NULL
             );
 
@@ -64,19 +63,36 @@ const createPlantsData = async () => {
       {
         name: "Monstera",
         description: "Beautiful plant!",
-        price: 100,
         category: "Plant",
       },
       {
         name: "Golden pothos",
         description: "Beautiful plant!",
-        price: 30,
         category: "Plant",
       },
       {
         name: "Snake Plant",
         description: "Beautiful plant!",
-        price: 100,
+        category: "Botanical",
+      },
+      {
+        name: "Money Tree",
+        description: "Beautiful plant!",
+        category: "Botanical",
+      },
+      {
+        name: "Bob plant",
+        description: "Beautiful plant!",
+        category: "Botanical",
+      },
+      {
+        name: "Joe Plant",
+        description: "Beautiful plant!",
+        category: "Botanical",
+      },
+      {
+        name: "Tree Plant",
+        description: "Beautiful plant!",
         category: "Botanical",
       },
     ];
@@ -174,11 +190,9 @@ const testDB = async () => {
 
     console.log("Checking for user plants...");
 
-    const userPlant1 = await getUserPlantById(1);
-    const userPlant2 = await getUserPlantById(2);
-    const userPlant3 = await getUserPlantById(3);
+    const userPlant = await getUserPlantsByUserId(1);
 
-    console.log("User plants: ", [userPlant1, userPlant2, userPlant3]);
+    console.log("User plants: ", userPlant);
   } catch (error) {
     console.error(error);
   }

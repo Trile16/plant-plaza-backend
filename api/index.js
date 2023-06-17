@@ -1,6 +1,7 @@
 const express = require("express");
 const apiRouter = express.Router();
 const jwt = require("jsonwebtoken");
+const { getUserById } = require("../db/users");
 
 apiRouter.use(async (req, res, next) => {
   const prefix = "Bearer ";
@@ -36,8 +37,7 @@ apiRouter.use("/plants", plantsRouter);
 const usersRouter = require("./users");
 apiRouter.use("/users", usersRouter);
 
-apiRouter.get("/", (req, res) => {
-  res.send("Hello world");
-});
+const userPlantsRouter = require("./user_plants");
+apiRouter.use("/user_plants", userPlantsRouter);
 
 module.exports = apiRouter;

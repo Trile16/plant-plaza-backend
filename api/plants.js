@@ -8,7 +8,7 @@ plantsRouter.use("/", (req, res, next) => {
   next();
 });
 
-// Get all plants route
+// GET /api/plants
 plantsRouter.get("/", async (req, res, next) => {
   try {
     const plants = await getPlants();
@@ -19,7 +19,7 @@ plantsRouter.get("/", async (req, res, next) => {
   }
 });
 
-// Get plant by id route
+// GET /api/plants/:id
 plantsRouter.get("/:id", async (req, res, next) => {
   try {
     const plant = await getPlantById(req.params.id);
