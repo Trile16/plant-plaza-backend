@@ -22,6 +22,7 @@
     "pg": "^8.11.0"
   },
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.2.15",
     "nodemon": "^2.0.22"
   }
 }
