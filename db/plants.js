@@ -1,12 +1,12 @@
 const client = require("./");
 
-const createPlant = async ({ name, description, category }) => {
+const createPlant = async ({ name, description, category, imageURL }) => {
   try {
     const { rows: plant } = await client.query(
-      `INSERT INTO plants(name, description, category)
-        VALUES ($1, $2, $3);
+      `INSERT INTO plants(name, description, category, "imageURL")
+        VALUES ($1, $2, $3, $4);
         `,
-      [name, description, category]
+      [name, description, category, imageURL]
     );
 
     return plant;
