@@ -19,12 +19,13 @@ const addPlantToUser = async ({ userId, plantId }) => {
 
 const removePlantFromUser = async (id) => {
   try {
+    console.log(id, "ID!");
     const {
       rows: [plant],
     } = await client.query(
       `
       DELETE FROM user_plants
-      WHERE user_plants.id = $1
+      WHERE id = $1
       RETURNING *;
     `,
       [id]

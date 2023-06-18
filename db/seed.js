@@ -45,8 +45,8 @@ const createTables = async () => {
 
             CREATE TABLE user_plants(
                 id SERIAL PRIMARY KEY,
-                "userId" INTEGER REFERENCES users(id),
-                "plantId" INTEGER REFERENCES plants(id),
+                "userId" INTEGER REFERENCES users(id) NOT NULL,
+                "plantId" INTEGER REFERENCES plants(id) NOT NULL,
                 UNIQUE ("userId", "plantId")
             );
         `);

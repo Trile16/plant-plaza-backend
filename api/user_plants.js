@@ -25,10 +25,11 @@ userPlantsRouter.get("/:userId", async (req, res, next) => {
   }
 });
 
-// POST /api/user_plants/:userId
-userPlantsRouter.post("/:userId", requireUser, async (req, res, next) => {
+// POST /api/user_plants
+userPlantsRouter.post("/", requireUser, async (req, res, next) => {
   try {
-    const { userId } = req.params;
+    console.log(req.user);
+    const userId = req.user.id;
     const { plantId } = req.body;
 
     const userPlant = await addPlantToUser({ userId, plantId });
@@ -39,12 +40,14 @@ userPlantsRouter.post("/:userId", requireUser, async (req, res, next) => {
   }
 });
 
-// DELETE /api/user_plants/:id
-userPlantsRouter.delete("/:id", requireUser, async (req, res, next) => {
+// DELETE /api/user_plants
+userPlantsRouter.delete("/", requireUser, async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { userPlantId } = req.body;
 
-    const removedPlant = await removePlantFromUser(id);
+    const removedPlant = await removePlantFromUser(userPlantId);
+
+    console.log(removedPlant);
 
     res.send(removedPlant);
   } catch (error) {
