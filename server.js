@@ -15,6 +15,10 @@ client.connect();
 
 server.use("/api", apiRouter);
 
+server.get("/", (req, res) =>
+  res.sendFile(path.join(__dirname, "../static/index.html"))
+);
+
 // empty route error handler
 server.get("*", (req, res) => {
   res.status(404).send({
