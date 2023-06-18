@@ -6,6 +6,41 @@
     <title>Plant Plaza API</title>
   </head>
   <body>
-    <div>Hello World!</div>
+    <nav>
+      <a href="#top-of-page">Top of Page</a>
+      <a href="#how-to-use">How to Use</a>
+    </nav>
+    <div class="content">
+      <a id="top-of-page"><h1>Plant Plaza API Documentation</h1></a>
+      <article class="intro">
+        <h2>Welcome to the Plant Plaza API~!</h2>
+        <p>
+          Here at Plant Plaza, we provide you with an easy to use API, so that
+          you can build your own plant wishlist. Just leave the data management
+          to us!
+        </p>
+        <p>We have a small amount of endpoints, which are documented below.</p>
+      </article>
+      <article class="intro">
+        <a id="#how-to-use"><h2>How to use the API</h2></a>
+        <ul>
+          <li>
+            Each endpoint will begin with the URL
+            <code>https://plant-plaza-api.fly.dev/</code>
+            (if you go here you will find this documentation)
+          </li>
+          <li>
+            The first segment of the path is /api, and every endpoint available
+            to use will have that prefix.
+            <code>https://plant-plaza-api.fly.dev/api</code>
+          </li>
+          <li>
+            The last segment of the path will be based on the resource used. For
+            example, a GET request to /plants to get all plants
+            <code>https://plant-plaza-api.fly.dev/api/plants</code>
+          </li>
+        </ul>
+      </article>
+    </div>
   </body>
 </html>

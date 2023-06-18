@@ -3,6 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
+const path = require("path");
 const apiRouter = require("./api");
 const server = express();
 const client = require("./db");
@@ -13,11 +14,11 @@ server.use(express.json());
 
 client.connect();
 
-server.use("/api", apiRouter);
-
 server.get("/", (req, res) =>
-  res.sendFile(path.join(__dirname, "../static/index.html"))
+  res.sendFile(path.join(__dirname, "/static/index.html"))
 );
+
+server.use("/api", apiRouter);
 
 // empty route error handler
 server.get("*", (req, res) => {
