@@ -3,12 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geologica:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
     <title>Plant Plaza API</title>
   </head>
   <body>
     <nav>
-      <a href="#top-of-page">Top of Page</a>
-      <a href="#how-to-use">How to Use</a>
+      <a class="navlink" href="#top-of-page">Top of Page</a>
+      <a class="navlink" href="#how-to-use">How to Use</a>
+      <a class="navlink" href="#return-schema">Return Schema</a>
+      <a class="navlink" href="#jwt-authentication">JWT Authenication</a>
     </nav>
     <div class="content">
       <a id="top-of-page"><h1>Plant Plaza API Documentation</h1></a>
@@ -22,7 +31,7 @@
         <p>We have a small amount of endpoints, which are documented below.</p>
       </article>
       <article class="intro">
-        <a id="#how-to-use"><h2>How to use the API</h2></a>
+        <a id="how-to-use"><h2>How to use the API</h2></a>
         <ul>
           <li>
             Each endpoint will begin with the URL
@@ -42,24 +51,159 @@
         </ul>
       </article>
       <article class="intro">
-        <a id="#how-to-use"><h2>How to use the API</h2></a>
-        <ul>
-          <li>
-            Each endpoint will begin with the URL
-            <code>https://plant-plaza-api.fly.dev/</code>
-            (if you go here you will find this documentation)
-          </li>
-          <li>
-            The first segment of the path is /api, and every endpoint available
-            to use will have that prefix.
-            <code>https://plant-plaza-api.fly.dev/api</code>
-          </li>
-          <li>
-            The last segment of the path will be based on the resource used. For
-            example, a GET request to /plants to get all plants
-            <code>https://plant-plaza-api.fly.dev/api/plants</code>
-          </li>
-        </ul>
+        <a id="return-schema"><h2>General Return Schema</h2></a>
+        <p>A successful request to the API will yield:</p>
+        <pre class="code">
+{ 
+  success: true,
+  data: {
+     plants: { // Plants information }
+  }, 
+  error: null 
+}</pre
+        >
+        <p>A failed request to the API will yield:</p>
+        <pre class="code">
+{ 
+  success: false,
+  error: {
+    name: "Plants Not Found",
+    message: "No plant with that id has been found."
+  },
+  data: null
+}</pre
+        >
+      </article>
+      <article class="intro">
+        <a id="jwt-authentication"><h2>JWT Authenication</h2></a>
+        <p>
+          Many calls that are made in this API are made in the context of a user
+          being registered. The API protects itself by requiring Authorization
+          for some routes using a token string passed in the Header.
+        </p>
+        <p>
+          The token string will be sometimes be asked for per requirements of
+          the function parameters. Runtime of the function will process this as.
+        </p>
+        <pre class="code">
+'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlciI6InRyaW1haWxAdHJpbWFpbC5jb20iLCJpYXQiOjE2ODcxOTEzNTJ9.4RUejWB48Ty05lwvGaKvjtr09ZabArzsFwQwlt_9x9g'</pre
+        >
+        <p>
+          An example request that requires Authorization will look like this.
+        </p>
+        <pre class="code">
+async function exampleFunction(token) {
+  try{
+    const response = await fetch(`https://plant-plaza-api.fly.dev/api/someEndPoint`, {
+      method: "POST",
+      headers: {
+       'Content-Type': 'application/json',
+       'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ /* Whatever information the API requires */})
+    });
+              
+    const result = await response.json();
+    console.log(result);
+    return result;
+  } catch(error) {
+    console.error(error);
+  }
+}</pre
+        >
+        <p>
+          It is important to recognize that the value for Authorization in the
+          Header is a string that starts with Bearer, followed by a space, and
+          ending with the token you receive from registering or logging in. If
+          the Authorization is not set in this format, the API won't be able to
+          recognize the token. This will result in an error.
+        </p>
+        <p>
+          If the token is malformed, expired, or missing, you will receive a
+          response specific to that
+        </p>
+        <pre class="code">
+{
+  success: false,
+  error: {
+    name: "JsonWebTokenError",
+    message: "invalid token"
+  },
+  data: null
+}</pre
+        >
+      </article>
+      <h1>Plants Endpoints</h1>
+      <article>
+        <h2>GET /plants</h2>
+        <article>
+          <p>
+            This route is used to get all plants in the database. On success,
+            you will receive all plant information from the API.
+          </p>
+          <h2>Fetch Options</h2>
+          <p>None</p>
+          <h2>Return Data</h2>
+          <ul>
+            <li>
+              plants (array of objects):
+              <ul>
+                <li>
+                  id (string): Database identifier for each individual plant
+                </li>
+                <li>name (string): This is the name for the plant</li>
+                <li>
+                  description (string): This is the description of the plant
+                </li>
+                <li>
+                  category (string): Each plant is given a category, which can
+                  be separated in its own group. (categories include Succulent,
+                  Tropical, Vine, Flowering)
+                </li>
+                <li>imageURL (string): This is the imageURL for the plant</li>
+              </ul>
+            </li>
+          </ul>
+          <h2>Sample Call</h2>
+          <pre class="code">
+async function fetchPlants() {
+  try{
+    const response = await fetch(`https://plant-plaza-api.fly.dev/api/plants`)
+                          
+    const result = await response.json();
+    console.log(result);
+    return result;
+  } catch(error) {
+    console.error(error);
+  }
+}</pre
+          >
+          <h2>Sample Result</h2>
+          <pre class="code">
+{
+  "success": true,
+  "data": [
+    {
+      "id": 1,
+      "name": "Snake Plant",
+      "description": "Versatile, attractive, and easy-to-care-for plant that adds a touch of elegance to any indoor or outdoor space.",
+      "category": "Succulent",
+      "imageURL": "https://images.unsplash.com/photo-1611211232932-da3113c5b960?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
+    },
+    {
+      "id": 2,
+      "name": "Monstera",
+      "description": "A popular choice among plant enthusiasts and interior decorators due to its striking foliage, adaptability, and unique growth pattern.",
+      "category": "Tropical",
+      "imageURL": "https://images.unsplash.com/photo-1614594975525-e45190c55d0b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=764&q=80"
+    }, 
+    /* More plants */
+  ]
+  error: null
+}
+          </pre>
+        </article>
+        <h2>GET /plants/:id</h2>
       </article>
     </div>
   </body>

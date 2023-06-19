@@ -1,0 +1,71 @@
+html {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  display: flex;
+  margin: auto;
+  height: 100%;
+  width: 100%;
+  font-family: "Geologica", sans-serif;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 15%;
+  background-color: green;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  justify-content: center;
+}
+
+.content {
+  padding-left: 16%;
+  width: 83%;
+  display: flex;
+  flex-direction: column;
+}
+
+.code {
+  color: white;
+  background-color: black;
+  width: 98%;
+  align-items: center;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+  padding: 1%;
+}
+
+article {
+  border: solid 2px black;
+  margin: 0.5vw;
+  padding: 0.5vw;
+  border-radius: 0.5vw;
+}
+
+.navlink {
+  padding: 0.2vw;
+  text-decoration: none;
+  box-shadow: inset 0 0 0 0 #54b3d6;
+  color: white;
+  margin: 0 -0.25rem;
+  padding: 0 0.25rem;
+  transition: color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.navlink:hover {
+  box-shadow: inset 200px 0 0 0 #54b3d6;
+  color: white;
+}
+
+.endpoint {
+}
