@@ -14,6 +14,8 @@ server.use(express.json());
 
 client.connect();
 
+server.use(express.static("static"));
+
 server.get("/", (req, res) =>
   res.sendFile(path.join(__dirname, "/static/index.html"))
 );
