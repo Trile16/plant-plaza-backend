@@ -18,7 +18,17 @@
       <a class="navlink" href="#how-to-use">How to Use</a>
       <a class="navlink" href="#return-schema">Return Schema</a>
       <a class="navlink" href="#jwt-authentication">JWT Authenication</a>
+      <a class="navlink" href="#plants-endpoints">PLANTS</a>
+      <ul>
+        <li>
+          <a class="navlink" href="#/plants">GET /plants</a>
+        </li>
+        <li>
+          <a class="navlink" href="#/plants/:id">GET /plants/:id</a>
+        </li>
+      </ul>
     </nav>
+
     <div class="content">
       <a id="top-of-page"><h1>Plant Plaza API Documentation</h1></a>
       <article class="intro">
@@ -133,9 +143,9 @@ async function exampleFunction(token) {
 }</pre
         >
       </article>
-      <h1>Plants Endpoints</h1>
+      <a id="plants-endpoints"><h1>Plants Endpoints</h1></a>
       <article>
-        <h2>GET /plants</h2>
+        <a id="/plants"><h2>GET /plants</h2></a>
         <article>
           <p>
             This route is used to get all plants in the database. On success,
@@ -203,7 +213,69 @@ async function fetchPlants() {
 }
           </pre>
         </article>
-        <h2>GET /plants/:id</h2>
+        <a id="/plants/:id"><h2>GET /plants/:id</h2></a>
+        <article>
+          <p>
+            This route is used to get a single plant from the database. On
+            success, you will receine plant information for the plant that
+            matches the plant id. The plant id is required to retrieve the plant
+            informtion (:id represents the URL variable).
+          </p>
+          <h2>Fetch Options</h2>
+          <p>None</p>
+          <h2>Return Data</h2>
+          <ul>
+            <li>
+              plant (object):
+              <ul>
+                <li>
+                  id (string): Database identifier for each individual plant
+                </li>
+                <li>name (string): This is the name for the plant</li>
+                <li>
+                  description (string): This is the description of the plant
+                </li>
+                <li>
+                  category (string): Each plant is given a category, which can
+                  be separated in its own group. (categories include Succulent,
+                  Tropical, Vine, Flowering)
+                </li>
+                <li>imageURL (string): This is the imageURL for the plant</li>
+              </ul>
+            </li>
+          </ul>
+          <h2>Sample Call</h2>
+          <pre class="code">
+
+async function fetchSinglePlant(id) {
+  try{
+    const response = await fetch(`https://plant-plaza-api.fly.dev/api/plants/${id}`)
+                          
+    const result = await response.json();
+    console.log(result);
+    return result;
+  } catch(error) {
+    console.error(error);
+  }
+}</pre
+          >
+          <h2>Sample Result</h2>
+          <pre class="code">
+{
+  "success": true,
+  "data": {
+    "plant": {
+      "id": 1,
+      "name": "Snake Plant",
+      "description": "Versatile, attractive, and easy-to-care-for plant that adds a touch of elegance to any indoor or outdoor space.",
+      "category": "Succulent",
+      "imageURL": "https://images.unsplash.com/photo-1611211232932-da3113c5b960?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80"
+    }
+  },
+  "error": null
+}
+          </pre>
+        </article>
       </article>
     </div>
   </body>

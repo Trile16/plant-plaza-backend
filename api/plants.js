@@ -13,7 +13,7 @@ plantsRouter.get("/", async (req, res, next) => {
   try {
     const plants = await getPlants();
 
-    res.send({ success: true, data: plants, error: null });
+    res.send({ success: true, data: { plants: plants }, error: null });
   } catch (error) {
     next(error);
   }
@@ -32,7 +32,7 @@ plantsRouter.get("/:id", async (req, res, next) => {
         message: "No plant has been found",
       });
     } else {
-      res.send({ success: true, data: plant, error: null });
+      res.send({ success: true, data: { plant: plant }, error: null });
     }
   } catch (error) {
     next(error);
