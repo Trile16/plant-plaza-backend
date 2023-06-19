@@ -27,6 +27,8 @@ nav {
   width: 83%;
   display: flex;
   flex-direction: column;
+  background-color: white;
+  color: black;
 }
 
 .code {

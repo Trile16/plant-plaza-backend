@@ -36,6 +36,18 @@
           <a class="navlink" href="#/users/login">POST /users/login</a>
         </li>
       </ul>
+      <a class="navlink" href="#user_plants-endpoints">USER PLANTS</a>
+      <ul>
+        <li>
+          <a class="navlink" href="#GET/user_plants">GET /user_plants</a>
+        </li>
+        <li>
+          <a class="navlink" href="#POST/user_plants">POST /user_plants</a>
+        </li>
+        <li>
+          <a class="navlink" href="#DELETE/user_plants">DELETE /user_plants</a>
+        </li>
+      </ul>
     </nav>
 
     <div class="content">
@@ -168,7 +180,7 @@ async function exampleFunction(token) {
               plants (array of objects):
               <ul>
                 <li>
-                  id (string): Database identifier for each individual plant
+                  id (integer): Database identifier for each individual plant
                 </li>
                 <li>name (string): This is the name for the plant</li>
                 <li>
@@ -238,7 +250,7 @@ async function fetchPlants() {
               plant (object):
               <ul>
                 <li>
-                  id (string): Database identifier for each individual plant
+                  id (integer): Database identifier for each individual plant
                 </li>
                 <li>name (string): This is the name for the plant</li>
                 <li>
@@ -298,14 +310,14 @@ async function fetchSinglePlant(id) {
           <h2>Fetch Options</h2>
           <p>Body:</p>
           <ul>
-            <li>firstName (string, required): first name for a new user</li>
-            <li>lastName (string, required): last name for a new user</li>
+            <li>firstName (string, required): First name for a new user</li>
+            <li>lastName (string, required): Last name for a new user</li>
             <li>
-              username (string, required, unique): desired username for a new
+              sername (string, required, unique): Desired username for a new
               user
             </li>
             <li>
-              password (string, required): desired password for a new user
+              password (string, required): Desired password for a new user
             </li>
           </ul>
           <h2>Return Data</h2>
@@ -361,8 +373,8 @@ async function fetchUserRegistration() {
           <h2>Fetch Options</h2>
           <p>Body:</p>
           <ul>
-            <li>username (string, required): registered username for a user</li>
-            <li>password (string, required): registered password for a user</li>
+            <li>username (string, required): Registered username for a user</li>
+            <li>password (string, required): Registered password for a user</li>
           </ul>
           <h2>Return Data</h2>
           <ul>
@@ -401,6 +413,222 @@ async function fetchUserLogin() {
     "message": "You're logged in!",
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywidXNlciI6ImpvaG5kb2UxMjMiLCJpYXQiOjE2ODcyMDUyNzh9.qeDb36-rg47lyiW2Lo8k1CCshZIj2IrYoOfIZ-BvpNA"
   },
+  "error": null
+}</pre
+          >
+        </article>
+      </article>
+      <a id="user_plants-endpoints"><h1>User Plants Endpoints</h1></a>
+      <article>
+        <a id="GET/user_plants"><h2>GET /user_plants</h2></a>
+        <article>
+          <p>
+            This route will retrieve user information and all plants that is
+            added to the user's plant wishlist. You must pass a valid token for
+            this request, or it will be rejected.
+          </p>
+          <h2>Fetch Options</h2>
+          <p>Headers:</p>
+          <ul>
+            <li>Content-Type (string, required): application/json</li>
+            <li>
+              Authorization (template literal, required): `Bearer
+              ${TOKEN_STRING_HERE}`
+            </li>
+          </ul>
+          <h2>Return Data</h2>
+          <ul>
+            <li>id (integer): Database identifier for each individual user</li>
+            <li>firstName (string): First name of the user</li>
+            <li>lastName (string): Last name of the user</li>
+            <li>username (string): Username of the user</li>
+            <li>plants (array of object):</li>
+            <ul>
+              <li>
+                id (integer): Database identifier for each individial plant
+              </li>
+              <li>name (string): This is the name for the plant</li>
+              <li>
+                description (string): This is the description of the plant
+              </li>
+              <li>
+                category (string): Each plant is given a category, which can be
+                separated in its own group. (categories include Succulent,
+                Tropical, Vine, Flowering)
+              </li>
+              <li>imageURL (string): This is the imageURL for the plant</li>
+            </ul>
+          </ul>
+          <h2>Sample Call</h2>
+          <pre class="code">
+async function fetchUserPlants(token) {
+  try{
+    const response = await fetch(`https://plant-plaza-api.fly.dev/api/user_plants`,
+    {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+    });
+
+    const result = await response.json();
+    console.log(result);
+    return result;
+  } catch(error) {
+    console.error(error);
+  }
+}</pre
+          >
+          <h2>Sample Result</h2>
+          <pre class="code">
+{
+  "success": true,
+  "data": {
+    "id": 3,
+    "firstName": "John",
+    "lastName": "Doe",
+    "username": "johndoe123",
+    "plants": [
+      {
+        "id": 32,
+        "name": "ZZ Plant",
+        "description": "Overall, the ZZ Plant is a versatile and visually appealing houseplant that can thrive in a variety of indoor conditions. Its glossy foliage and low-maintenance nature make it an excellent choice for beginners or those looking for a resilient and attractive addition to their plant collection.",
+        "category": "Tropical",
+        "imageURL": "https://media.istockphoto.com/id/1219720875/photo/zanzibar-gem-or-zz-plant-on-the-windowsill.jpg?s=612x612&w=0&k=20&c=S6Y4RbXZPzq-7DX-vALeszB6GO7or5uEbYWui7BuT74="
+      }
+    ]
+  },
+  "error": null
+}</pre
+          >
+        </article>
+        <a id="POST/user_plants"><h2>POST /user_plants</h2></a>
+        <article>
+          <p>
+            This route will add a plant to a logged in user's plant wishlist.
+            You must pass a valid token for this request, or it will be
+            rejected.
+          </p>
+          <h2>Fetch Options</h2>
+          <p>Headers:</p>
+          <ul>
+            <li>Content-Type (string, required): application/json</li>
+            <li>
+              Authorization (template literal, required): `Bearer
+              ${TOKEN_STRING_HERE}`
+            </li>
+          </ul>
+          <p>Body:</p>
+          <ul>
+            <li>plantId (integer, required): Id of a specified plant</li>
+          </ul>
+          <h2>Return Data</h2>
+          <ul>
+            <li>id (integer): Database identifier for user to plant pairing</li>
+            <li>userId (integer): Database identifier for a specific user</li>
+            <li>plantId (integer): Database identifier for a specific plant</li>
+          </ul>
+          <h2>Sample Call</h2>
+          <pre class="code">
+async function addPlantToUser(token) {
+  try{
+    const response = await fetch(`https://plant-plaza-api.fly.dev/api/user_plants`,
+    {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        plantId: 23
+      })
+    });
+
+    const result = await response.json();
+    console.log(result);
+    return result;
+  } catch(error) {
+    console.error(error);
+  }
+}</pre
+          >
+          <h2>Sample Return</h2>
+          <pre class="code">
+{
+  "success": true,
+  "data": [
+    {
+      "id": 15,
+      "userId": 3,
+      "plantId": 23
+    }
+  ],
+  "error": null
+}</pre
+          >
+        </article>
+        <a id="DELETE/user_plants"><h2>DELETE /user_plants</h2></a>
+        <article>
+          <p>
+            This route will remove a plant from a logged in user's plant
+            wishlist. You must pass a valid token for this request, or it will
+            be rejected.
+          </p>
+          <h2>Fetch Options</h2>
+          <p>Headers:</p>
+          <ul>
+            <li>Content-Type (string, required): application/json</li>
+            <li>
+              Authorization (template literal, required): `Bearer
+              ${TOKEN_STRING_HERE}`
+            </li>
+          </ul>
+          <p>Body:</p>
+          <ul>
+            <li>plantId (integer, required): Id of a specified plant</li>
+          </ul>
+          <h2>Return Data</h2>
+          <ul>
+            <li>id (integer): Database identifier for user to plant pairing</li>
+            <li>userId (integer): Database identifier for a specific user</li>
+            <li>plantId (integer): Database identifier for a specific plant</li>
+          </ul>
+          <h2>Sample Call</h2>
+          <pre class="code">
+async function removePlantFromUser(token) {
+  try{
+    const response = await fetch(`https://plant-plaza-api.fly.dev/api/user_plants`,
+    {
+      method: "DELETE",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        plantId: 23
+      })
+    });
+
+    const result = await response.json();
+    console.log(result);
+    return result;
+  } catch(error) {
+    console.error(error);
+  }
+}</pre
+          >
+          <h2>Sample Return</h2>
+          <pre class="code">
+{
+  "success": true,
+  "data": [
+    {
+      "id": 15,
+      "userId": 3,
+      "plantId": 23
+    }
+  ],
   "error": null
 }</pre
           >
