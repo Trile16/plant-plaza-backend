@@ -4,11 +4,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { createUser, getUserByUsername } = require("../db/users");
 
-usersRouter.use("/", (req, res, next) => {
-  console.log("Welcome to the users route!");
-  next();
-});
-
 // POST /api/users/register
 usersRouter.post("/register", async (req, res, next) => {
   const { firstName, lastName, username, password } = req.body;
@@ -56,8 +51,6 @@ usersRouter.post("/login", async (req, res, next) => {
   try {
     const { username, password } = req.body;
 
-    console.log(password);
-
     if (!username || !password) {
       next({
         name: "Missing Credentials Error",
@@ -74,10 +67,7 @@ usersRouter.post("/login", async (req, res, next) => {
       });
     }
 
-    console.log(user, "user");
     const passwordMatch = await bcrypt.compare(password, user.password);
-
-    console.log(passwordMatch);
 
     if (passwordMatch) {
       const token = jwt.sign(

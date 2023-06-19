@@ -9,10 +9,9 @@ const createUser = async ({
   password,
   isAdmin = false,
 }) => {
-  console.log(firstName, "FIRST NAME");
   try {
     const hashedPassword = await bcrypt.hash(password, SALT_COUNT);
-    console.log(hashedPassword, "FIRST NAME");
+
     const {
       rows: [user],
     } = await client.query(
@@ -24,6 +23,7 @@ const createUser = async ({
     );
 
     delete user.hashedPassword;
+    delete user.isAdmin;
 
     return user;
   } catch (error) {
