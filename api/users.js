@@ -42,8 +42,9 @@ usersRouter.post("/register", async (req, res, next) => {
     );
 
     res.send({
-      message: "Thank you for signing up",
-      token,
+      success: true,
+      data: { message: "Thank you for signing up", token },
+      error: null,
     });
   } catch (error) {
     next(error);
@@ -68,8 +69,8 @@ usersRouter.post("/login", async (req, res, next) => {
 
     if (!user) {
       next({
-        name: "Incorrect Credentials Error",
-        message: "Username or password is incorrect",
+        name: "MissingUserError",
+        message: "You must be logged in to perform this action",
       });
     }
 
@@ -86,7 +87,11 @@ usersRouter.post("/login", async (req, res, next) => {
         },
         process.env.JWT_SECRET
       );
-      res.send({ message: "You're logged in!", token: token });
+      res.send({
+        success: true,
+        data: { message: "You're logged in!", token: token },
+        error: null,
+      });
     } else {
       next({
         name: "Incorrect Credentials Error",

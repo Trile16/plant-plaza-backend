@@ -13,7 +13,7 @@ plantsRouter.get("/", async (req, res, next) => {
   try {
     const plants = await getPlants();
 
-    res.send(plants);
+    res.send({ success: true, data: plants, error: null });
   } catch (error) {
     next(error);
   }
@@ -24,7 +24,16 @@ plantsRouter.get("/:id", async (req, res, next) => {
   try {
     const plant = await getPlantById(req.params.id);
 
-    res.send(plant);
+    console.log(plant);
+
+    if (!plant) {
+      next({
+        name: "MissingPlantError",
+        message: "No plant has been found",
+      });
+    } else {
+      res.send({ success: true, data: plant, error: null });
+    }
   } catch (error) {
     next(error);
   }

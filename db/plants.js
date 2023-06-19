@@ -39,6 +39,10 @@ const getPlantById = async (id) => {
       [id]
     );
 
+    if (!plant) {
+      return null;
+    }
+
     return plant;
   } catch (error) {
     console.error(error);

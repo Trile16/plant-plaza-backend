@@ -23,25 +23,22 @@ server.use("/api", apiRouter);
 // empty route error handler
 server.get("*", (req, res) => {
   res.status(404).send({
-    error: "404 - Not Found",
-    message: "No route found for the requested URL",
+    success: false,
+    error: {
+      name: "404 - Not Found",
+      message: "No route found for the requested URL",
+    },
+    data: null,
   });
 });
 
 // error handler
 server.use((error, req, res, next) => {
   console.error("SERVER ERROR: ", error);
-  console.log({
-    error: error.message,
-    name: error.name,
-    message: error.message,
-    table: error.table,
-  });
   res.send({
-    error: error.message,
-    name: error.name,
-    message: error.message,
-    table: error.table,
+    success: false,
+    error: { name: error.name, message: error.message },
+    data: null,
   });
 });
 

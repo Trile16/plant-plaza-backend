@@ -17,18 +17,18 @@ const addPlantToUser = async ({ userId, plantId }) => {
   }
 };
 
-const removePlantFromUser = async (id) => {
+const removePlantFromUser = async ({ userId, plantId }) => {
   try {
-    console.log(id, "ID!");
+    console.log(userId + plantId, "ID!");
     const {
       rows: [plant],
     } = await client.query(
       `
       DELETE FROM user_plants
-      WHERE id = $1
+      WHERE "userId"= $1 AND "plantId"=$2
       RETURNING *;
     `,
-      [id]
+      [userId, plantId]
     );
 
     return plant;
@@ -50,6 +50,8 @@ const getUserPlantsByUserId = async (userId) => {
         `,
       [userId]
     );
+
+    console.log(user_plants, "00!!!");
 
     return user_plants;
   } catch (error) {

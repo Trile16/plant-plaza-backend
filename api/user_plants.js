@@ -12,14 +12,33 @@ userPlantsRouter.use("/", (req, res, next) => {
   next();
 });
 
-// GET /api/user_plants/:userId
-userPlantsRouter.get("/:userId", async (req, res, next) => {
+// GET /api/user_plants
+userPlantsRouter.get("/", requireUser, async (req, res, next) => {
   try {
-    const { userId } = req.params;
+    console.log(req.user, "REQ.USER");
 
-    const userPlants = await getUserPlantsByUserId(userId);
+    const userPlants = await getUserPlantsByUserId(req.user.id);
 
-    res.send(userPlants);
+    console.log(userPlants);
+
+    if (!userPlants) {
+      next({
+        name: "User Plants not found!",
+        message: "No plants found for the user",
+      });
+    } else {
+      res.send({
+        success: true,
+        data: {
+          id: req.user.id,
+          firstName: req.user.firstName,
+          lastName: req.user.lastName,
+          username: req.user.username,
+          plants: userPlants,
+        },
+        error: null,
+      });
+    }
   } catch (error) {
     next(error);
   }
@@ -33,8 +52,17 @@ userPlantsRouter.post("/", requireUser, async (req, res, next) => {
     const { plantId } = req.body;
 
     const userPlant = await addPlantToUser({ userId, plantId });
+    console.log(userPlant);
 
-    res.send(userPlant);
+    if (!userPlant) {
+      next({
+        name: "Add Plant to User Error",
+        message:
+          "Error adding plant to user (may already be added) or plantId may not exist.",
+      });
+    } else {
+      res.send({ success: true, data: userPlant, error: null });
+    }
   } catch (error) {
     next(error);
   }
@@ -43,13 +71,19 @@ userPlantsRouter.post("/", requireUser, async (req, res, next) => {
 // DELETE /api/user_plants
 userPlantsRouter.delete("/", requireUser, async (req, res, next) => {
   try {
-    const { userPlantId } = req.body;
+    const { plantId } = req.body;
+    const userId = req.user.id;
 
-    const removedPlant = await removePlantFromUser(userPlantId);
+    const removedPlant = await removePlantFromUser({ userId, plantId });
 
-    console.log(removedPlant);
-
-    res.send(removedPlant);
+    if (!removedPlant) {
+      next({
+        name: "User Plant Not Found",
+        message: "No plant found from the user to be deleted",
+      });
+    } else {
+      res.send({ success: true, data: removedPlant, error: null });
+    }
   } catch (error) {
     next(error);
   }
