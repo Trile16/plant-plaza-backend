@@ -67,6 +67,7 @@ article {
   margin-top: 1rem;
   transition: color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   list-style: none;
+  width: fit-content;
 }
 
 .navlink:hover {
