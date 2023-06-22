@@ -6,7 +6,7 @@ html {
 body {
   display: flex;
   margin: auto;
-  height: 100%;
+  height: 100vh;
   font-family: "Geologica", sans-serif;
   box-sizing: border-box;
 }
@@ -30,7 +30,6 @@ nav {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: white;
   color: black;
   box-sizing: border-box;
 }
@@ -50,12 +49,13 @@ nav {
 }
 
 article {
-  border: solid 2px black;
+  border: solid 1px lightgrey;
   margin: 0.5vw;
   padding: 0.5vw;
   border-radius: 0.5vw;
   word-wrap: break-word;
   box-sizing: border-box;
+  background-color: white;
 }
 
 .navlink {
