@@ -9,12 +9,18 @@ usersRouter.post("/register", async (req, res, next) => {
   const { firstName, lastName, username, password } = req.body;
 
   try {
+    if (!firstName || !lastName || !username || !password) {
+      next({
+        name: "Missing Credentials Error",
+        message: "Please supply all fields for user creation",
+      });
+    }
     const _user = await getUserByUsername(username);
 
     if (_user) {
       next({
         name: "User Exists Error",
-        message: "A user by that email already exists",
+        message: "A user by that username already exists",
       });
     }
 
@@ -38,7 +44,10 @@ usersRouter.post("/register", async (req, res, next) => {
 
     res.send({
       success: true,
-      data: { message: "Thank you for signing up", token },
+      data: {
+        message: "Thank you for registering. Welcome to Plant Plaza!",
+        token,
+      },
       error: null,
     });
   } catch (error) {
@@ -79,7 +88,7 @@ usersRouter.post("/login", async (req, res, next) => {
       );
       res.send({
         success: true,
-        data: { message: "You're logged in!", token: token },
+        data: { message: "Thank you for logging in!", token: token },
         error: null,
       });
     } else {
